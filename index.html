@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ECE Lab — Electronics Engineering Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@300;400;500;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<!-- CUSTOM CURSOR -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-trail" id="cursorTrail"></div>
+
+<!-- LOADING SCREEN -->
+<div class="loader" id="loader">
+  <div class="loader-inner">
+    <canvas id="loaderCanvas"></canvas>
+    <div class="loader-text">
+      <span class="loader-title">ECE LAB</span>
+      <div class="loader-bar"><div class="loader-fill" id="loaderFill"></div></div>
+      <span class="loader-status" id="loaderStatus">Initializing circuits...</span>
+    </div>
+  </div>
+</div>
+
+<!-- NAVIGATION -->
+<nav class="nav" id="nav">
+  <div class="nav-logo">
+    <div class="nav-logo-icon">⚡</div>
+    <span>ECE<em>Lab</em></span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#hero" data-section="hero">Home</a></li>
+    <li><a href="#components" data-section="components">Components</a></li>
+    <li><a href="#debugger" data-section="debugger">Debug</a></li>
+    <li><a href="#calculator" data-section="calculator">Calculators</a></li>
+    <li><a href="#circuits" data-section="circuits">Circuits</a></li>
+    <li><a href="#ai" data-section="ai">AI Assistant</a></li>
+  </ul>
+  <div class="nav-signal">
+    <span class="signal-dot"></span>
+    <span class="signal-dot"></span>
+    <span class="signal-dot"></span>
+  </div>
+</nav>
+
+<!-- ======================== HERO ======================== -->
+<section class="hero" id="hero">
+  <canvas id="heroCanvas"></canvas>
+  <div class="hero-content">
+    <div class="hero-badge">v2.0 — ECE Engineering Platform</div>
+    <h1 class="hero-title">
+      <span class="line">ELECTRONICS</span>
+      <span class="line accent">ENGINEERING</span>
+      <span class="line">LAB</span>
+    </h1>
+    <p class="hero-sub">Your complete toolkit for ECE students & professionals.<br/>3D component explorer · Circuit debugger · AI assistant</p>
+    <div class="hero-cta">
+      <a href="#components" class="btn-primary">Explore Components</a>
+      <a href="#debugger" class="btn-outline">Debug Circuit</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hstat"><span class="hstat-n">500+</span><span class="hstat-l">Components</span></div>
+      <div class="hstat"><span class="hstat-n">120+</span><span class="hstat-l">Calculators</span></div>
+      <div class="hstat"><span class="hstat-n">80+</span><span class="hstat-l">Circuit Tools</span></div>
+    </div>
+  </div>
+  <div class="hero-3d" id="hero3d">
+    <canvas id="componentCanvas"></canvas>
+  </div>
+  <div class="hero-scroll">
+    <span>SCROLL</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ======================== COMPONENTS LIBRARY ======================== -->
+<section class="section" id="components">
+  <div class="section-header">
+    <div class="sh-label">01 / Component Library</div>
+    <h2 class="sh-title">Every Component<br/><em>You Need</em></h2>
+    <p class="sh-sub">Complete database of passive, active, logic, RF, power, and sensor components</p>
+  </div>
+
+  <!-- SEARCH + FILTER -->
+  <div class="comp-toolbar">
+    <div class="comp-search">
+      <span class="search-icon">⌕</span>
+      <input type="text" id="compSearch" placeholder="Search components, datasheets, specs..." autocomplete="off"/>
+      <kbd>⌘K</kbd>
+    </div>
+    <div class="comp-filters" id="compFilters">
+      <button class="filter-btn active" data-cat="all">All</button>
+      <button class="filter-btn" data-cat="passive">Passive</button>
+      <button class="filter-btn" data-cat="active">Active</button>
+      <button class="filter-btn" data-cat="logic">Logic ICs</button>
+      <button class="filter-btn" data-cat="power">Power</button>
+      <button class="filter-btn" data-cat="rf">RF/Wireless</button>
+      <button class="filter-btn" data-cat="sensor">Sensors</button>
+      <button class="filter-btn" data-cat="mcu">MCU/SoC</button>
+      <button class="filter-btn" data-cat="display">Display</button>
+      <button class="filter-btn" data-cat="memory">Memory</button>
+    </div>
+  </div>
+
+  <!-- COMPONENT GRID -->
+  <div class="comp-grid" id="compGrid"></div>
+
+  <!-- COMPONENT DETAIL MODAL -->
+  <div class="comp-modal" id="compModal">
+    <div class="comp-modal-bg" onclick="closeModal()"></div>
+    <div class="comp-modal-box">
+      <button class="modal-close" onclick="closeModal()">✕</button>
+      <div class="modal-3d" id="modal3d">
+        <canvas id="modalCanvas"></canvas>
+      </div>
+      <div class="modal-info" id="modalInfo"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================== CIRCUIT DEBUGGER ======================== -->
+<section class="section dark-section" id="debugger">
+  <div class="section-header">
+    <div class="sh-label">02 / Circuit Debugger</div>
+    <h2 class="sh-title">Debug Your<br/><em>Circuit</em></h2>
+    <p class="sh-sub">Describe your circuit problem — get instant analysis, fault detection & solutions</p>
+  </div>
+
+  <div class="debugger-wrap">
+    <div class="debugger-left">
+      <div class="debug-tabs">
+        <button class="dtab active" data-tab="describe">Describe Problem</button>
+        <button class="dtab" data-tab="symptoms">By Symptoms</button>
+        <button class="dtab" data-tab="schematic">Schematic Check</button>
+      </div>
+
+      <!-- TAB: DESCRIBE -->
+      <div class="dtab-panel active" id="tab-describe">
+        <textarea class="debug-input" id="debugInput" placeholder="Example: My 555 timer circuit isn't oscillating. I've connected pin 1 to GND, pin 8 to VCC (5V), pins 4&8 tied together, R1=10kΩ, R2=47kΩ, C=10µF on pin 2/6. LED connected on pin 3 with 470Ω. Nothing lights up..."></textarea>
+        <div class="debug-actions">
+          <button class="btn-primary" onclick="analyzeCircuit()">⚡ Analyze Circuit</button>
+          <button class="btn-ghost" onclick="clearDebug()">Clear</button>
+        </div>
+      </div>
+
+      <!-- TAB: SYMPTOMS -->
+      <div class="dtab-panel" id="tab-symptoms">
+        <div class="symptom-grid" id="symptomGrid">
+          <label class="symp-check"><input type="checkbox" value="no_output"/> No output</label>
+          <label class="symp-check"><input type="checkbox" value="heating"/> Component overheating</label>
+          <label class="symp-check"><input type="checkbox" value="oscillation"/> Unwanted oscillation</label>
+          <label class="symp-check"><input type="checkbox" value="noise"/> Excessive noise</label>
+          <label class="symp-check"><input type="checkbox" value="low_voltage"/> Lower than expected voltage</label>
+          <label class="symp-check"><input type="checkbox" value="high_current"/> High current draw</label>
+          <label class="symp-check"><input type="checkbox" value="ic_failure"/> IC not responding</label>
+          <label class="symp-check"><input type="checkbox" value="instability"/> Signal instability</label>
+          <label class="symp-check"><input type="checkbox" value="short"/> Possible short circuit</label>
+          <label class="symp-check"><input type="checkbox" value="wrong_freq"/> Wrong frequency</label>
+          <label class="symp-check"><input type="checkbox" value="bias"/> Incorrect bias point</label>
+          <label class="symp-check"><input type="checkbox" value="saturation"/> Transistor saturation</label>
+        </div>
+        <div class="form-row">
+          <input class="debug-field" type="text" id="circuitType" placeholder="Circuit type (e.g. Amplifier, Oscillator, PSU...)"/>
+          <input class="debug-field" type="text" id="supplyVoltage" placeholder="Supply voltage (e.g. 5V, 12V)"/>
+        </div>
+        <button class="btn-primary" onclick="analyzeSymptoms()">⚡ Diagnose</button>
+      </div>
+
+      <!-- TAB: SCHEMATIC -->
+      <div class="dtab-panel" id="tab-schematic">
+        <div class="schematic-upload">
+          <div class="upload-zone" id="uploadZone">
+            <div class="upload-icon">📷</div>
+            <p>Upload schematic image or paste netlist</p>
+            <span>PNG, JPG, SVG, or text netlist</span>
+            <input type="file" id="schematicFile" accept="image/*,.txt,.net" style="display:none"/>
+            <button class="btn-ghost" onclick="document.getElementById('schematicFile').click()">Browse File</button>
+          </div>
+          <div class="netlist-area">
+            <textarea class="debug-input" id="netlistInput" placeholder="Or paste SPICE netlist here...
+.circuit example
+V1 1 0 DC 5
+R1 1 2 1k
+C1 2 0 10u
+.op
+.end"></textarea>
+          </div>
+        </div>
+        <button class="btn-primary" onclick="checkSchematic()">⚡ Check Schematic</button>
+      </div>
+    </div>
+
+    <div class="debugger-right">
+      <div class="debug-output" id="debugOutput">
+        <div class="debug-placeholder">
+          <div class="dbp-icon">🔬</div>
+          <p>Your circuit analysis will appear here</p>
+          <span>Describe your problem or select symptoms to begin</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================== CALCULATORS ======================== -->
+<section class="section" id="calculator">
+  <div class="section-header">
+    <div class="sh-label">03 / Engineering Calculators</div>
+    <h2 class="sh-title">Calculate<br/><em>Anything</em></h2>
+  </div>
+
+  <div class="calc-tabs">
+    <button class="calc-tab active" data-calc="ohm">Ohm's Law</button>
+    <button class="calc-tab" data-calc="rc">RC Filter</button>
+    <button class="calc-tab" data-calc="rlc">RLC Resonance</button>
+    <button class="calc-tab" data-calc="opamp">Op-Amp</button>
+    <button class="calc-tab" data-calc="555">555 Timer</button>
+    <button class="calc-tab" data-calc="transistor">Transistor</button>
+    <button class="calc-tab" data-calc="power">Power</button>
+    <button class="calc-tab" data-calc="led">LED</button>
+    <button class="calc-tab" data-calc="voltage_divider">V. Divider</button>
+  </div>
+
+  <div class="calc-panels" id="calcPanels"></div>
+</section>
+
+<!-- ======================== CIRCUIT REFERENCE ======================== -->
+<section class="section dark-section" id="circuits">
+  <div class="section-header">
+    <div class="sh-label">04 / Circuit Reference</div>
+    <h2 class="sh-title">Circuit<br/><em>Encyclopedia</em></h2>
+  </div>
+  <div class="circuit-grid" id="circuitGrid"></div>
+</section>
+
+<!-- ======================== AI ASSISTANT ======================== -->
+<section class="section" id="ai">
+  <div class="section-header">
+    <div class="sh-label">05 / AI Assistant</div>
+    <h2 class="sh-title">ECE AI<br/><em>Assistant</em></h2>
+    <p class="sh-sub">Powered by Claude — your 24/7 electronics engineering expert</p>
+  </div>
+
+  <div class="ai-chat-wrap">
+    <div class="ai-chat-messages" id="chatMessages">
+      <div class="ai-msg ai">
+        <div class="ai-avatar">⚡</div>
+        <div class="ai-bubble">
+          <p>Hello! I'm your ECE AI Assistant. I can help you with:</p>
+          <ul>
+            <li>🔧 Circuit design and debugging</li>
+            <li>📐 Component selection and specs</li>
+            <li>⚡ Power electronics & signal theory</li>
+            <li>🧮 Engineering calculations</li>
+            <li>📚 Theory explanations (BJT, FET, Op-Amps, etc.)</li>
+            <li>🛠 PCB design tips</li>
+          </ul>
+          <p>What can I help you with today?</p>
+        </div>
+      </div>
+    </div>
+    <div class="ai-chat-input-wrap">
+      <div class="ai-quick-prompts">
+        <button onclick="sendQuickPrompt('Explain how a BJT transistor works as an amplifier')">BJT Amplifier</button>
+        <button onclick="sendQuickPrompt('How to design a 5V regulated power supply?')">5V PSU Design</button>
+        <button onclick="sendQuickPrompt('What causes oscillation in op-amp circuits?')">Op-Amp Oscillation</button>
+        <button onclick="sendQuickPrompt('Explain PCB trace width calculation for 1A current')">PCB Trace Width</button>
+      </div>
+      <div class="ai-input-row">
+        <textarea id="chatInput" placeholder="Ask anything about electronics, circuits, components..." rows="2"></textarea>
+        <button class="ai-send" id="aiSendBtn" onclick="sendAIMessage()">
+          <span>Send</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="footer-logo">⚡ ECELab</div>
+      <p>The complete electronics engineering platform for students and professionals.</p>
+    </div>
+    <div class="footer-links">
+      <h4>Tools</h4>
+      <a href="#components">Component Library</a>
+      <a href="#debugger">Circuit Debugger</a>
+      <a href="#calculator">Calculators</a>
+      <a href="#circuits">Circuit Reference</a>
+    </div>
+    <div class="footer-links">
+      <h4>Resources</h4>
+      <a href="#">Datasheets</a>
+      <a href="#">Theory Guides</a>
+      <a href="#">PCB Design</a>
+      <a href="#">Signal Processing</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 ECELab — Built for engineers</span>
+    <div class="footer-signal">
+      <span class="fsig"></span><span class="fsig"></span><span class="fsig"></span><span class="fsig"></span>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="app.js"></script>
+<script src="enhance.js"></script>
+</body>
+</html>
